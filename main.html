@@ -1,0 +1,187 @@
+<html>
+<head>
+  <title>FS-Html Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+form {
+    border: 3px solid #f1f1f1;
+}
+
+input[type=text], input[type=password],input[type=email] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.container {
+    padding: 16px;
+}
+
+.assign{
+border: 10px groove;
+}
+
+</style>
+</head>
+<body>
+
+
+
+<form id="loginform">
+  <h2>Login Form</h2>
+  <div class="container">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+        
+    <button type="submit">Login</button>
+  
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    <a href="#" id="register">New Users Register</a>
+  </div>
+</form>
+
+<form id="registerform">
+  <h2>Register Form</h2>
+  <div class="container">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+	<label><b>Email</b></label>
+    <input type="email" placeholder="Enter Email" name="email" required>
+	
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+        
+    <button type="submit">Register</button>
+  
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    <a href="#" id="returnLogin">Return to Login</a>
+  </div>
+</form>
+
+<div class="assign">
+<h1>draw circle using canvas</h1>
+<canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+</div>
+
+<div class="assign">
+<h1>Local storage</h1>
+<p><button onclick="clickCounterLocal()" type="button">Local Storage Button!</button></p>
+<div id="locresult"></div>
+<p>Click the button to see the counter increase.</p>
+<p>Close the browser tab (or window), and try again, and the counter will continue to count (is not reset).</p>
+
+<h1>Session storage</h1>
+<p><button onclick="clickCounterSession()" type="button">Session Storage Button!</button></p>
+<div id="sesresult"></div>
+<p>Click the button to see the counter increase.</p>
+<p>Close the browser tab (or window), and try again, and the counter is reset.</p>
+</div>
+
+<div class="assign" id="sse">
+<h1>WEB SOCKET</h1>
+
+<p>Count numbers: <output id="result"></output></p>
+<button onclick="startWorker()">Start Worker</button> 
+<button onclick="stopWorker()">Stop Worker</button>
+
+</div>
+<script>
+$(document).ready(function() {
+  $('#loginform').show();
+  $('#registerform').hide();
+   $('#returnLogin').click(function(e) {
+    e.preventDefault();
+     $('#loginform').show();
+  $('#registerform').hide();
+  });
+  $('#register').click(function(e) {
+    e.preventDefault();
+    $('#registerform').show();
+  $('#loginform').hide();
+  });
+  });
+  
+  var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+ctx.stroke();
+var w;
+function clickCounterLocal() {
+    if(typeof(Storage) !== "undefined") {
+        if (localStorage.clickcount) {
+            localStorage.clickcount = Number(localStorage.clickcount)+1;
+        } else {
+            localStorage.clickcount = 1;
+        }
+        document.getElementById("locresult").innerHTML = "You have clicked the button " + localStorage.clickcount + " time(s).";
+    } else {
+        document.getElementById("locresult").innerHTML = "Sorry, your browser does not support web storage...";
+    }
+}
+
+function clickCounterSession() {
+    if(typeof(Storage) !== "undefined") {
+        if (sessionStorage.clickcount) {
+            sessionStorage.clickcount = Number(sessionStorage.clickcount)+1;
+        } else {
+            sessionStorage.clickcount = 1;
+        }
+        document.getElementById("sesresult").innerHTML = "You have clicked the button " + sessionStorage.clickcount + " time(s) in this session.";
+    } else {
+        document.getElementById("sesresult").innerHTML = "Sorry, your browser does not support web storage...";
+    }
+}
+
+
+
+function startWorker() {
+    if(typeof(Worker) !== "undefined") {
+        if(typeof(w) == "undefined") {
+            w = new Worker("demo_workers.js");
+        }
+        w.onmessage = function(event) {
+            document.getElementById("result").innerHTML = event.data;
+        };
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+    }
+}
+
+function stopWorker() { 
+    w.terminate();
+    w = undefined;
+}
+</script>
+
+</body>
+</html>
+  
